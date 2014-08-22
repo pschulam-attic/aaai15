@@ -1,0 +1,13 @@
+Package: aaai15
+Title: What the package does (short line)
+Version: 0.1
+Authors@R: person("Peter", "Schulam", role=c("aut", "cre"),
+    email="pschulam@gmail.com")
+Description: What the package does (paragraph)
+Depends:
+    R (>= 3.1.1),
+    ggplot2,
+    MCMCpack,
+    mvtnorm
+License: GPL (>= 2)
+LazyData: true
