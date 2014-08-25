@@ -8,6 +8,7 @@ Depends:
     R (>= 3.1.0),
     ggplot2,
     MCMCpack,
-    mvtnorm
+    mvtnorm,
+    kml
 License: GPL (>= 2)
 LazyData: true
