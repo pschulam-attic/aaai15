@@ -3,6 +3,5 @@
 exportPattern("^[^\\.]")
 import(MCMCpack)
 import(ggplot2)
-import(kml)
 import(mvtnorm)
 import(splines)
