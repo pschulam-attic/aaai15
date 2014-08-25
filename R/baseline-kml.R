@@ -1,4 +1,3 @@
-#' @import kml
 runKml <- function(data,t.range,n.clusters,n.bins=10,n.restarts=10) {
   breaks <- seq(t.range[1],t.range[2],length.out=n.bins+1)
   expandSequence <- function(s) {
@@ -19,7 +18,6 @@ runKml <- function(data,t.range,n.clusters,n.bins=10,n.restarts=10) {
   cld
 }
 
-#' @import kml
 kmlPartition <- function(cld,k,rank=1) {
   getClusters(cld,k,rank,asInteger=TRUE)
 }
