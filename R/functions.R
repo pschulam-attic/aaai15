@@ -81,6 +81,39 @@ sequenceCovariance <- function(s,model) {
   v1 + v2
 }
 
+sequencePredictions <- function(s, model, new.t) {
+  if (missing(new.t)) {
+    new.t <- times(s)
+  }
+  t <- times(s)
+  y <- values(s)
+  x <- covariates(s)
+
+  amp <- model$hypers$amp
+  len <- model$hypers$len
+  sig <- model$hypers$sig
+
+  inf <- sequencePosterior(s, model)
+  z <- which.max(inf$q)
+  y1 <- bSplineDesign(t, model$t.range, model$num.bases) %*% model$coefs[, z]
+  new.y1 <- bSplineDesign(new.t, model$t.range, model$num.bases) %*% model$coefs[, z]
+
+  A <- linearDesign(t, model$t.range)
+  y.sigma <- diag(sig^2, length(y))
+  b.mu <- model$parameters$loadings %*% x
+  b.sigma <- model$hypers$sigma.offset
+  b.sigma.post <- solve(solve(b.sigma) + t(A) %*% solve(y.sigma, A))
+  b.mu.post <- b.sigma.post %*% (t(A) %*% solve(y.sigma, y-y1) + solve(b.sigma, b.mu))
+  y2 <- A %*% b.mu.post
+  new.y2 <- linearDesign(new.t, model$t.range) %*% b.mu.post
+
+  K <- sqExpGram(new.t,t,amp,len)
+  S <- sqExpCov(t,amp,len,sig)
+  new.y3 <- K %*% solve(S,y-y1-y2)
+
+  cbind(new.y1, new.y2, new.y3, new.y1+new.y2+new.y3)
+}
+
 ################################################################################
 ### Inference functions
 
