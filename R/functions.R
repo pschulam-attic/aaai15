@@ -89,14 +89,15 @@ sequencePredictions <- function(s, model, new.t) {
   y <- values(s)
   x <- covariates(s)
 
+  beta <- model$parameters$coefs
   amp <- model$hypers$amp
   len <- model$hypers$len
   sig <- model$hypers$sig
 
   inf <- sequencePosterior(s, model)
   z <- which.max(inf$q)
-  y1 <- bSplineDesign(t, model$t.range, model$num.bases) %*% model$coefs[, z]
-  new.y1 <- bSplineDesign(new.t, model$t.range, model$num.bases) %*% model$coefs[, z]
+  y1 <- bSplineDesign(t, model$t.range, model$num.bases) %*% beta[, z]
+  new.y1 <- bSplineDesign(new.t, model$t.range, model$num.bases) %*% beta[, z]
 
   A <- linearDesign(t, model$t.range)
   y.sigma <- diag(sig^2, length(y))
