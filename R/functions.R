@@ -293,6 +293,7 @@ runEm <- function(data,model,tol=1e-4,maxiter=1e2) {
     old.logl <- inf$logl
   }
 
+  inf <- eStep(data, model)
   model$clusters <- apply(inf$q,2,which.max)
   model$logl <- inf$logl
   model
@@ -317,10 +318,12 @@ sequencePoints <- function(data) {
 #' @import ggplot2
 plotResults <- function(model,data) {
   k <- model$num.clusters
-  z <- model$clusters
-  logl <- model$logl
+  inf <- eStep(data, model)
+  z <- apply(inf$q, 2, which.max)
+  logl <- inf$logl
   p <- ggplot() + labs(title=sprintf('LL=%.02f',logl))
   for (i in seq(k)) {
+    if (sum(z==i) == 0) next
     sp <- sequencePoints(data[z==i])
     d <- cbind(as.data.frame(sp),z=i)
     p <- p + geom_point(aes(t,y),data=d,alpha=0.25)
